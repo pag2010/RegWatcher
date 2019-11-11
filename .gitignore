@@ -1,5 +1,9 @@
-
 *.dll
 bin/
 obj/
 
+v15/
+node_modules/
+.vs/RegWatcher/v15/.suo
+.vs/RegWatcher/v15/Server/sqlite3/storage.ide
+.vs/RegWatcher/v15/Server/sqlite3/storage.ide-wal
