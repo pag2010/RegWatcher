@@ -7,3 +7,6 @@ node_modules/
 .vs/RegWatcher/v15/.suo
 .vs/RegWatcher/v15/Server/sqlite3/storage.ide
 .vs/RegWatcher/v15/Server/sqlite3/storage.ide-wal
+*.ide
+*.ide-wal
+.vs/RegWatcher/DesignTimeBuild/.dtbcache

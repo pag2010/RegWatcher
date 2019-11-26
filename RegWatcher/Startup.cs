@@ -10,6 +10,7 @@ using RegWatcher.Data;
 using RegWatcher.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 namespace RegWatcher
 {
@@ -36,7 +37,8 @@ namespace RegWatcher
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
-                    .AddEntityFrameworkStores<DataContext>();
+                    .AddEntityFrameworkStores<DataContext>()
+                    .AddDefaultTokenProviders();
 
             services.AddScoped<ApplicationUser>();
             services.AddScoped<AuthorizeFilterAttribute>();
@@ -76,6 +78,8 @@ namespace RegWatcher
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseMiddleware<ExceptionFilterMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -36,21 +36,21 @@ namespace RegWatcher
                 return webHost;
             }
 
-            /*public static IWebHost SeedingData(this IWebHost webHost)
+            public static IWebHost SeedingData(this IWebHost webHost)
             {
                 using (var serviceScope = webHost.Services.CreateScope())
                 {
                     var context = serviceScope.ServiceProvider.GetService<DataContext>();
                     var hostingEnvironment = serviceScope.ServiceProvider.GetService<IHostingEnvironment>();
 
-                    if (hostingEnvironment.EnvironmentName == "Debug" && !context.JobSeekers.Any())
+                    if (hostingEnvironment.EnvironmentName == "Development" && !context.ApplicationRoles.Any())
                     {
                         DataSeeder.InitData(context);
                     }
                 }
 
                 return webHost;
-            }*/
+            }
         }
     }
 

@@ -10,6 +10,7 @@ namespace RegWatcher.Data
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {

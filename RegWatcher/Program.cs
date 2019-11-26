@@ -20,7 +20,7 @@ namespace RegWatcher
             CreateWebHostBuilder(args)
                 .Build()
                 .Migrate()
-                //.SeedingData()
+                .SeedingData()
                 .Run();
         }
 

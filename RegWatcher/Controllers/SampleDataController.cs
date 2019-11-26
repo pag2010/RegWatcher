@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RegWatcher.Data;
 using RegWatcher.Filters;
 
 namespace RegWatcher.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "User")]
     public class SampleDataController : Controller
     {
         private static string[] Summaries = new[]
