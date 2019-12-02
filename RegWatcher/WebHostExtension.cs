@@ -43,9 +43,12 @@ namespace RegWatcher
                     var context = serviceScope.ServiceProvider.GetService<DataContext>();
                     var hostingEnvironment = serviceScope.ServiceProvider.GetService<IHostingEnvironment>();
 
-                    if (hostingEnvironment.EnvironmentName == "Development" && !context.ApplicationRoles.Any())
+                    if (hostingEnvironment.EnvironmentName == "Development")
                     {
-                        DataSeeder.InitData(context);
+                        if (!context.ApplicationRoles.Any())
+                            DataSeeder.InitRoles(context);
+                        if (!context.FileExtensions.Any())
+                            DataSeeder.InitFileExtensions(context);
                     }
                 }
 

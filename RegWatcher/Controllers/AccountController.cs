@@ -42,7 +42,7 @@ namespace RegWatcher.Controllers
                 var applicationUser = new ApplicationUser()
                 {
                     Email = user.Email,
-                    UserName = user.Email
+                    UserName = string.Format($"{user.FirstName.Trim().Replace(" ", "_")} {user.SecondName.Trim().Replace(" ", "_")} {user.LastName.Trim().Replace(" ", "_")}")
                 };
 
                 var regResult = await _userManager.CreateAsync(applicationUser, user.Password);

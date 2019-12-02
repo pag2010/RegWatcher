@@ -10,3 +10,8 @@ node_modules/
 *.ide
 *.ide-wal
 .vs/RegWatcher/DesignTimeBuild/.dtbcache
+.vs/RegWatcher/v15/Server/sqlite3/storage.ide-wal
+.vs/RegWatcher/v15/Server/sqlite3/storage.ide-shm
+.vs/RegWatcher/v15/Server/sqlite3/storage.ide
+.vs/RegWatcher/v15/.suo
+.vs/RegWatcher/DesignTimeBuild/.dtbcache

@@ -10,10 +10,27 @@ namespace RegWatcher.Data
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
-
+        public DbSet<FileExtension> FileExtensions { get; set; }
+        public DbSet<File> Files { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Step> Steps { get; set; }
+        public DbSet<DocumentType> DocumentTypes { get; set; }
+        public DbSet<Document> Documents { get; set; }
+ 
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Document>()
+               .HasIndex(d => d.Number).IsUnique();
+
+            builder.Entity<File>()
+                .HasIndex(f => f.Guid).IsUnique();
         }
     }
 }

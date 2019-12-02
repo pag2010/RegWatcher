@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191202173832_FixedLengthFileExtension")]
+    partial class FixedLengthFileExtension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,54 +188,6 @@ namespace RegWatcher.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RegWatcher.Data.Document", b =>
-                {
-                    b.Property<int>("DocumentId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("DeadLine");
-
-                    b.Property<int>("FileId");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<string>("ResponsibleUserId");
-
-                    b.Property<int>("StepId");
-
-                    b.Property<int?>("TagId");
-
-                    b.HasKey("DocumentId");
-
-                    b.HasIndex("FileId");
-
-                    b.HasIndex("Number")
-                        .IsUnique();
-
-                    b.HasIndex("ResponsibleUserId");
-
-                    b.HasIndex("StepId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("RegWatcher.Data.DocumentType", b =>
-                {
-                    b.Property<int>("DocumentTypeId");
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.HasKey("DocumentTypeId");
-
-                    b.ToTable("DocumentTypes");
-                });
-
             modelBuilder.Entity("RegWatcher.Data.File", b =>
                 {
                     b.Property<int>("FileId")
@@ -249,9 +203,6 @@ namespace RegWatcher.Data.Migrations
 
                     b.HasIndex("FileExtensionId");
 
-                    b.HasIndex("Guid")
-                        .IsUnique();
-
                     b.ToTable("Files");
                 });
 
@@ -266,33 +217,6 @@ namespace RegWatcher.Data.Migrations
                     b.HasKey("FileExtensionId");
 
                     b.ToTable("FileExtensions");
-                });
-
-            modelBuilder.Entity("RegWatcher.Data.Step", b =>
-                {
-                    b.Property<int>("StepId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.HasKey("StepId");
-
-                    b.ToTable("Steps");
-                });
-
-            modelBuilder.Entity("RegWatcher.Data.Tag", b =>
-                {
-                    b.Property<int>("TagId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.HasKey("TagId");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("RegWatcher.Data.ApplicationRole", b =>
@@ -352,27 +276,6 @@ namespace RegWatcher.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RegWatcher.Data.Document", b =>
-                {
-                    b.HasOne("RegWatcher.Data.File", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegWatcher.Data.ApplicationUser", "ResponsibleUser")
-                        .WithMany()
-                        .HasForeignKey("ResponsibleUserId");
-
-                    b.HasOne("RegWatcher.Data.Step", "Step")
-                        .WithMany()
-                        .HasForeignKey("StepId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegWatcher.Data.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId");
                 });
 
             modelBuilder.Entity("RegWatcher.Data.File", b =>
