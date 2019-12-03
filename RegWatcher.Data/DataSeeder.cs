@@ -71,6 +71,9 @@ namespace RegWatcher.Data
                 new FileExtension { FileExtensionId=Enums.FileExtensions.ppt, ExtensionName=".pptx"},
                 new FileExtension { FileExtensionId=Enums.FileExtensions.xls, ExtensionName=".xls"},
                 new FileExtension { FileExtensionId=Enums.FileExtensions.xlsx, ExtensionName=".xlsx"},
+                new FileExtension { FileExtensionId=Enums.FileExtensions.zip, ExtensionName=".zip"},
+                new FileExtension { FileExtensionId=Enums.FileExtensions.rar, ExtensionName=".rar"},
+                new FileExtension { FileExtensionId=Enums.FileExtensions.sevenZip, ExtensionName=".7z"},
             };
             #endregion
             context.AddRange(fileExt);
@@ -110,6 +113,45 @@ namespace RegWatcher.Data
             };
             #endregion
             context.AddRange(roles);
+            context.SaveChanges();
+        }
+
+        public static void InitSteps(DataContext context)
+        {
+            #region Steps
+            List<Step> steps = new List<Step>()
+            {
+                new Step { StepId = Enums.Steps.Assigned, Name = "Назначено"},
+                new Step { StepId = Enums.Steps.Accepted, Name = "Принято"},
+                new Step { StepId = Enums.Steps.Denied, Name = "Отказано"},
+                new Step { StepId = Enums.Steps.Processing, Name = "В работе"},
+                new Step { StepId = Enums.Steps.Completed, Name = "Выполнено"},
+                new Step { StepId = Enums.Steps.New, Name = "Новое"},
+                new Step { StepId = Enums.Steps.Waiting, Name = "В ожидании"},
+            };
+            #endregion
+            context.AddRange(steps);
+            context.SaveChanges();
+        }
+
+        public static void InitDocumentTypes(DataContext context)
+        {
+            #region DocumentTypes
+            List<DocumentType> docTypes = new List<DocumentType>()
+            {
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.Disposition, TypeName = "Распоряжение" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.Protocol, TypeName = "Протокол" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.Request, TypeName = "Запрос" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.Responce, TypeName = "Ответ" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.InformationProvision, TypeName = "Предоставление информации" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.TermsOfUse, TypeName = "Правила эксплуатации" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.SafetyDeclaration, TypeName = "Декларация безопасности" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.Resolution, TypeName = "Разрешение" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.Order, TypeName = "Приказ" },
+                new DocumentType(){DocumentTypeId=Enums.DocumentTypes.Custom, TypeName = "Произвольный документ" },
+            };
+            #endregion
+            context.AddRange(docTypes);
             context.SaveChanges();
         }
     }

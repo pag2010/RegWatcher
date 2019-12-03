@@ -12,5 +12,12 @@ namespace RegWatcher.Data
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
+
+        public List<DocumentTag> DocumentTags { get; set; }
+
+        public Tag()
+        {
+            this.DocumentTags = new List<DocumentTag>();
+        }
     }
 }

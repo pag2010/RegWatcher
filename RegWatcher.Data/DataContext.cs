@@ -25,12 +25,25 @@ namespace RegWatcher.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+           
             builder.Entity<Document>()
                .HasIndex(d => d.Number).IsUnique();
 
             builder.Entity<File>()
                 .HasIndex(f => f.Guid).IsUnique();
+
+            builder.Entity<DocumentTag>()
+                .HasKey(k => new { k.DocumentId, k.TagId });
+
+            builder.Entity<DocumentTag>()
+                .HasOne(dt => dt.Document)
+                .WithMany(dt => dt.DocumentTags)
+                .HasForeignKey(dt => dt.DocumentId);
+
+            builder.Entity<DocumentTag>()
+                .HasOne(dt => dt.Tag)
+                .WithMany(dt => dt.DocumentTags)
+                .HasForeignKey(dt => dt.TagId);
         }
     }
 }

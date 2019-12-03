@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191203162523_FileAddedDataDocumentFix")]
+    partial class FileAddedDataDocumentFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,6 +212,8 @@ namespace RegWatcher.Data.Migrations
 
                     b.Property<int>("StepId");
 
+                    b.Property<int>("TagId");
+
                     b.HasKey("DocumentId");
 
                     b.HasIndex("DocumentTypeId");
@@ -225,20 +229,9 @@ namespace RegWatcher.Data.Migrations
 
                     b.HasIndex("StepId");
 
-                    b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("RegWatcher.Data.DocumentTag", b =>
-                {
-                    b.Property<int>("DocumentId");
-
-                    b.Property<int>("TagId");
-
-                    b.HasKey("DocumentId", "TagId");
-
                     b.HasIndex("TagId");
 
-                    b.ToTable("DocumentTag");
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("RegWatcher.Data.DocumentType", b =>
@@ -264,10 +257,6 @@ namespace RegWatcher.Data.Migrations
                     b.Property<string>("Data");
 
                     b.Property<int>("FileExtensionId");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(255);
 
                     b.Property<Guid>("Guid");
 
@@ -405,17 +394,9 @@ namespace RegWatcher.Data.Migrations
                         .WithMany()
                         .HasForeignKey("StepId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RegWatcher.Data.DocumentTag", b =>
-                {
-                    b.HasOne("RegWatcher.Data.Document", "Document")
-                        .WithMany("DocumentTags")
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RegWatcher.Data.Tag", "Tag")
-                        .WithMany("DocumentTags")
+                        .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

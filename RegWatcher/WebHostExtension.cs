@@ -49,6 +49,10 @@ namespace RegWatcher
                             DataSeeder.InitRoles(context);
                         if (!context.FileExtensions.Any())
                             DataSeeder.InitFileExtensions(context);
+                        if (!context.Steps.Any())
+                            DataSeeder.InitSteps(context);
+                        if (!context.DocumentTypes.Any())
+                            DataSeeder.InitDocumentTypes(context);
                     }
                 }
 

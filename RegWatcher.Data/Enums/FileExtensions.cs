@@ -20,6 +20,9 @@ namespace RegWatcher.Data.Enums
         ppt = 12,
         pptx= 13,
         xls = 14,
-        xlsx=15
+        xlsx = 15,
+        zip = 16,
+        rar = 17,
+        sevenZip = 18
     }
 }

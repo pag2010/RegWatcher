@@ -106,9 +106,10 @@ namespace RegWatcher.Controllers
         {
             var applicationUser = await _userManager.FindByEmailAsync(user.Email);
             var r = await _signInManager.PasswordSignInAsync(applicationUser, user.Password, user.RememberMe, false);
-            if (r.Succeeded)
-                return Redirect(returnUrl);
-            throw new Exception("Пользователь не найден или неверно указаны почта или пароль");
+            if (!r.Succeeded)
+                throw new Exception("Пользователь не найден или неверно указаны почта или пароль");
+
+            return Redirect(string.IsNullOrEmpty(returnUrl) ? "/home" : returnUrl);
         }
 
         [HttpGet]

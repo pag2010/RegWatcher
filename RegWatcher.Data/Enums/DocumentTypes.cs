@@ -14,6 +14,7 @@ namespace RegWatcher.Data.Enums
         TermsOfUse = 6,
         SafetyDeclaration = 7,
         Resolution = 8,
-        Order = 9
+        Order = 9,
+        Custom = 10,
     }
 }
