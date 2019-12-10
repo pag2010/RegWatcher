@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191209171729_UserName added")]
+    partial class UserNameadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,7 +195,7 @@ namespace RegWatcher.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreationDate");
 
-                    b.Property<DateTimeOffset?>("DeadLine");
+                    b.Property<DateTimeOffset>("DeadLine");
 
                     b.Property<int>("DocumentTypeId");
 

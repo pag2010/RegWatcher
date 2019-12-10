@@ -22,7 +22,7 @@ namespace RegWatcher.Data
 
         [Required]
         [ForeignKey("FileExtensionId")]
-        public FileExtension FileExtension { get; set; }
+        public virtual FileExtension FileExtension { get; set; }
 
         public string Data { get; set; }
     }

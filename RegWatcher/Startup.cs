@@ -11,6 +11,11 @@ using RegWatcher.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using RegWatcher.Middleware;
+using RegWatcher.Interfaces.IRepositories;
+using RegWatcher.Repositories;
+using RegWatcher.Interfaces.IManagers;
+using RegWatcher.Managers;
 
 namespace RegWatcher
 {
@@ -42,6 +47,9 @@ namespace RegWatcher
 
             services.AddScoped<ApplicationUser>();
             services.AddScoped<AuthorizeFilterAttribute>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IDocumentManager, DocumentManager>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -79,6 +87,7 @@ namespace RegWatcher
                 app.UseHsts();
             }
 
+            //app.UseMiddleware<AuthorizationMiddleware>();
             app.UseMiddleware<ExceptionFilterMiddleware>();
 
             app.UseHttpsRedirection();

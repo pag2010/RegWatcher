@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191210163108_FK document try fix")]
+    partial class FKdocumenttryfix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,7 +195,7 @@ namespace RegWatcher.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreationDate");
 
-                    b.Property<DateTimeOffset?>("DeadLine");
+                    b.Property<DateTimeOffset>("DeadLine");
 
                     b.Property<int>("DocumentTypeId");
 
@@ -206,7 +208,8 @@ namespace RegWatcher.Data.Migrations
                     b.Property<string>("OwnerUserId")
                         .IsRequired();
 
-                    b.Property<string>("ResponsibleUserId");
+                    b.Property<string>("ResponsibleUserId")
+                        .IsRequired();
 
                     b.Property<int>("StepId");
 
@@ -405,7 +408,8 @@ namespace RegWatcher.Data.Migrations
 
                     b.HasOne("RegWatcher.Data.ApplicationUser", "ResponsibleUser")
                         .WithMany()
-                        .HasForeignKey("ResponsibleUserId");
+                        .HasForeignKey("ResponsibleUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RegWatcher.Data.Step", "Step")
                         .WithMany()

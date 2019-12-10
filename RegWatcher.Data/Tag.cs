@@ -13,7 +13,7 @@ namespace RegWatcher.Data
         [StringLength(50)]
         public string Name { get; set; }
 
-        public List<DocumentTag> DocumentTags { get; set; }
+        public virtual List<DocumentTag> DocumentTags { get; set; }
 
         public Tag()
         {

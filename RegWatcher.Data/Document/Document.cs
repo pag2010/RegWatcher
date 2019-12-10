@@ -19,29 +19,26 @@ namespace RegWatcher.Data
         public DocumentTypes DocumentTypeId { get; set; }
 
         [Required]
-        [ForeignKey("DocumentTypeId")]
-        public DocumentType DocumentType { get; set; }
+        public virtual DocumentType DocumentType { get; set; }
 
+        [ForeignKey("ResponsibleUser")]
         public string ResponsibleUserId { get; set; }
 
-        [ForeignKey("ResponsibleUserId")]
-        public ApplicationUser ResponsibleUser { get; set; }
+        public virtual ApplicationUser ResponsibleUser { get; set; }
 
         [Required]
         public string OwnerUserId { get; set; }
 
-        [Required]
         [ForeignKey("OwnerUserId")]
-        public ApplicationUser OwnerUser { get; set; }
+        public virtual ApplicationUser OwnerUser { get; set; }
 
         [Required]
         public int FileId { get; set; }
 
         [Required]
-        [ForeignKey("FileId")]
-        public File File { get; set; }
-        
-        public DateTimeOffset DeadLine { get; set; }
+        public virtual File File { get; set; }
+
+        public DateTimeOffset? DeadLine { get; set; } = null;
 
         public DateTimeOffset CreationDate { get; set; } = DateTimeOffset.Now;
 
@@ -49,10 +46,9 @@ namespace RegWatcher.Data
         public Steps StepId { get; set; }
 
         [Required]
-        [ForeignKey("StepId")]
-        public Step Step { get; set; }
+        public virtual Step Step { get; set; }
 
-        public List<DocumentTag> DocumentTags { get; set; }
+        public virtual List<DocumentTag> DocumentTags { get; set; }
 
         public Document()
         {
