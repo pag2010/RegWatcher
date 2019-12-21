@@ -160,12 +160,12 @@ namespace RegWatcher.Controllers
             return await _userManager.RemoveFromRolesAsync(requestedUser, roles);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Authorize(Roles = "Administrator")]
         public IEnumerable<ApplicationUserModel> GetUsers(int page, int countPerPage = 10)
         {
             return _userManager.GetPagedUsers(_userRepository, page, countPerPage);
-        }
+        }*/
 
         [HttpPost]
         [Authorize]
@@ -182,5 +182,25 @@ namespace RegWatcher.Controllers
             return _context.ApplicationRoles.Select(r => r.Name);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrator,Specialist,HeadOfDepartment,Inspector")]
+        public IEnumerable<ApplicationUserModel> GetUsers(string filter)
+        {
+
+            var query = from user in _context.ApplicationUsers
+                            where user.Email.Contains(filter)
+                        || user.Id.Contains(filter)
+                        || user.FirstName.Contains(filter)
+                        || user.SecondName.Contains(filter)
+                        || user.LastName.Contains(filter)
+                        select new ApplicationUserModel
+                        {
+                            Email = user.Email,
+                            IsEmailConfirmed = user.EmailConfirmed,
+                            Name = string.Format($"{user.FirstName} {user.SecondName} {user.LastName}").Trim(),
+                            UserId = user.Id
+                        };
+            return query.ToList();
+        }
     }
 }

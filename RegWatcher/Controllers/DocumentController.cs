@@ -24,14 +24,17 @@ namespace RegWatcher.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly DataContext _context;
         private readonly IDocumentRepository _documentRepository;
+        private readonly ITagRepository _tagRepository;
         private readonly IDocumentManager _documentManager;
 
         public DocumentController(UserManager<ApplicationUser> userManager, DataContext context,
-            IDocumentRepository documentRepository, IDocumentManager documentManager)
+            IDocumentRepository documentRepository, ITagRepository tagRepository, 
+            IDocumentManager documentManager)
         {
             _userManager = userManager;
             _context = context;
             _documentRepository = documentRepository;
+            _tagRepository = tagRepository;
             _documentManager = documentManager;
         }
 
@@ -78,7 +81,7 @@ namespace RegWatcher.Controllers
 
             return new DocumentLiteModel(document, 
                 string.Format($"{document.File.FileName}{document.File.FileExtension.ExtensionName}"),
-                document.OwnerUser, document.ResponsibleUser);
+                document.OwnerUser, document.ResponsibleUser, document.DocumentTags.Select(dt => dt.Tag));
         }
 
         [Authorize(Roles = "Administrator,Specialist,Inspector,HeadOfDepartment")]
@@ -89,19 +92,42 @@ namespace RegWatcher.Controllers
 
             return new DocumentLiteModel(document, 
                 string.Format($"{document.File.FileName}{document.File.FileExtension.ExtensionName}"),
-                document.OwnerUser, document.ResponsibleUser );
+                document.OwnerUser, document.ResponsibleUser, document.DocumentTags.Select(dt => dt.Tag));
         }
 
         [Authorize(Roles = "Administrator,Specialist,Inspector,HeadOfDepartment")]
-        [HttpGet]
-        public IEnumerable<DocumentLiteModel> LoadPaged(int page, int countPerPage = 10)
+        [HttpPost]
+        public JsonResult AddToTags(int documentId, [FromBody] IEnumerable<int> tags)
         {
-            var documents = _documentManager.GetPagedDocuments(page, countPerPage);
-            var docModels = documents.Select(d => new DocumentLiteModel(d, 
-                string.Format($"{d.File.FileName}{d.File.FileExtension.ExtensionName}"), d.OwnerUser, d.ResponsibleUser))
-            .ToList();
-                
-            return docModels;
+            var document = _documentRepository.GetDocument(documentId);
+            IEnumerable<Tag> foundedTags = tags.Select(t=>_tagRepository.GetTag(t));
+            _documentManager.AddDocumentToTags(document, foundedTags);
+            object data = null;
+
+            return new JsonResult(new { data, success = "true" });
+        }
+
+        [Authorize(Roles = "Administrator,Specialist,Inspector,HeadOfDepartment")]
+        [HttpPost]
+        public IEnumerable<DocumentLiteModel> GetDocumentsByTag(string tagName, int page, int countPerPage)
+        {
+            return _documentManager.GetDocumentsByTagName(tagName, page, countPerPage)
+                .Select(d => new DocumentLiteModel(d,
+                    string.Format($"{d.File.FileName}{d.File.FileExtension.ExtensionName}"),
+                    d.OwnerUser, d.ResponsibleUser, d.DocumentTags.Select(dt => dt.Tag)))
+                .ToList(); ;
+        }
+
+        [Authorize(Roles = "Inspector,Administrator,Specialist,HeadOfDepartment")]
+        [HttpPost]
+        public IEnumerable<DocumentLiteModel> GetMyDocuments(DocumentFilter filter,
+            int page, int countPerPage = 10)
+        {
+            return _documentManager.GetDocumentsByFilter(filter, page, countPerPage)
+                .Select(d => new DocumentLiteModel(d,
+                    string.Format($"{d.File.FileName}{d.File.FileExtension.ExtensionName}"),
+                    d.OwnerUser, d.ResponsibleUser, d.DocumentTags.Select(dt => dt.Tag)))
+                .ToList();
         }
     }
 }

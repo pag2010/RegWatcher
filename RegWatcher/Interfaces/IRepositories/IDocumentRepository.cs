@@ -1,4 +1,5 @@
 ﻿using RegWatcher.Data;
+using RegWatcher.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace RegWatcher.Interfaces.IRepositories
         Task AddDocumentAsync(Document document);
         Document GetDocument(int documentId);
         Document GetDocument(string number);
-        IQueryable<Document> GetPagedDocuments(int page, int countPerPage);
+        void AddDocumentToTag(Document document, Tag tag);
+        IQueryable<Document> GetDocumentsByFilter(DocumentFilter filter);
     }
 }
