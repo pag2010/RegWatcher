@@ -53,6 +53,10 @@ namespace RegWatcher
                             DataSeeder.InitSteps(context);
                         if (!context.DocumentTypes.Any())
                             DataSeeder.InitDocumentTypes(context);
+                        if (!context.Positions.Any())
+                            DataSeeder.InitPositions(context);
+                        if (!context.FormKinds.Any())
+                            DataSeeder.InitFormKinds(context);
                     }
                 }
 

@@ -15,8 +15,8 @@ namespace RegWatcher.Models.ViewModels
         {
             Email = user.Email;
             Id = user.Id;
-            var LastName = user.LastName == "" ? string.Empty : " "+user.LastName;
-            Name = string.Format($"{user.FirstName} {user.SecondName}{user.LastName}");
+            var LastName = user.Person.LastName == "" ? string.Empty : " "+user.Person.LastName;
+            Name = string.Format($"{user.Person.FirstName} {user.Person.SecondName}{LastName}").Trim();
         }
     }
 }

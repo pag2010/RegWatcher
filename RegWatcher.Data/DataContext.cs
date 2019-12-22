@@ -16,6 +16,10 @@ namespace RegWatcher.Data
         public DbSet<Step> Steps { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Person> Persons { get; set; }
+        public DbSet<FormKind> FormKinds{get;set;}
+        public DbSet<Company> Companies { get; set; }
  
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)

@@ -12,5 +12,6 @@ namespace RegWatcher.Models.ViewModels
         public string Name { get; set; }
         public string UserId { get; set; }
         public IEnumerable<string> Roles {get;set;}
+        public string ConfirmedByUserId { get; set; }
     }
 }

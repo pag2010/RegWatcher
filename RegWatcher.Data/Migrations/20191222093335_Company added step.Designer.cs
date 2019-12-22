@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191222093335_Company added step")]
+    partial class Companyaddedstep
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,6 +224,8 @@ namespace RegWatcher.Data.Migrations
 
                     b.Property<int>("StepId");
 
+                    b.Property<int?>("StepId1");
+
                     b.Property<DateTime?>("UpdateTime");
 
                     b.Property<string>("UserId")
@@ -233,7 +237,7 @@ namespace RegWatcher.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.HasIndex("StepId");
+                    b.HasIndex("StepId1");
 
                     b.HasIndex("UserId");
 
@@ -514,8 +518,7 @@ namespace RegWatcher.Data.Migrations
 
                     b.HasOne("RegWatcher.Data.Step", "Step")
                         .WithMany()
-                        .HasForeignKey("StepId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("StepId1");
 
                     b.HasOne("RegWatcher.Data.ApplicationUser", "User")
                         .WithMany()

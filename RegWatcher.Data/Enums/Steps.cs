@@ -12,6 +12,7 @@ namespace RegWatcher.Data.Enums
         Processing = 4,
         Completed = 5,
         New = 6,
-        Waiting = 7
+        Waiting = 7,
+        Registred = 8
     }
 }

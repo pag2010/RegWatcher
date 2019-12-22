@@ -129,5 +129,48 @@ namespace RegWatcher.Controllers
                     d.OwnerUser, d.ResponsibleUser, d.DocumentTags.Select(dt => dt.Tag)))
                 .ToList();
         }
+
+        [Authorize(Roles = "Inspector,Administrator,Specialist,HeadOfDepartment")]
+        [HttpGet]
+        public DocumentLiteModel ChangeDocumentStep(int documentId, int stepId)
+        {
+            try
+            {
+                var document = _documentManager.GetDocumentById(documentId);
+                if (document == null)
+                    throw new Exception("Документ не был найден");
+                _documentManager.ChangeDocumentStep(document, stepId);
+                return new DocumentLiteModel(document,
+                    string.Format($"{document.File.FileName}{document.File.FileExtension.ExtensionName}"),
+                    document.OwnerUser, document.ResponsibleUser, document.DocumentTags.Select(dt => dt.Tag));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Не удалось поменять состояние документа из-за ошибки: {ex.Message}");
+            }
+        }
+
+        [Authorize(Roles = "Inspector,Administrator,Specialist,HeadOfDepartment")]
+        [HttpGet]
+        public async Task<DocumentLiteModel> ChangeDocumentResponsibleUser(int documentId, string userId)
+        {
+            try
+            {
+                var document = _documentManager.GetDocumentById(documentId);
+                if (document == null)
+                    throw new Exception("Документ не был найден");
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    throw new Exception("Пользователь не был найден");
+                _documentManager.ChangeResponsibleUser(document, user);
+                return new DocumentLiteModel(document,
+                    string.Format($"{document.File.FileName}{document.File.FileExtension.ExtensionName}"),
+                    document.OwnerUser, document.ResponsibleUser, document.DocumentTags.Select(dt => dt.Tag));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Не удалось поменять ответственного сотрудника документа из-за ошибки: {ex.Message}");
+            }
+        }
     }
 }

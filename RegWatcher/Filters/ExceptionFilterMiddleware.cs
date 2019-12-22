@@ -34,7 +34,7 @@ namespace RegWatcher.Filters
         {
             context.Response.ContentType = "application/json";
             var exceptionType = exception.GetType();
-            var errorDetails = new { Message = JsonConvert.SerializeObject(exception.Message.ToString()) };
+            var errorDetails = JsonConvert.SerializeObject(new { success = false, message = exception.Message.ToString() });
 
             if (exceptionType == typeof(InvalidOperationException))
             {

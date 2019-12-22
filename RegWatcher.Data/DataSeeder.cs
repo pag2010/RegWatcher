@@ -128,6 +128,7 @@ namespace RegWatcher.Data
                 new Step { StepId = Enums.Steps.Completed, Name = "Выполнено"},
                 new Step { StepId = Enums.Steps.New, Name = "Новое"},
                 new Step { StepId = Enums.Steps.Waiting, Name = "В ожидании"},
+                new Step { StepId = Enums.Steps.Registred, Name = "Зарегистрировано"},
             };
             #endregion
             context.AddRange(steps);
@@ -152,6 +153,41 @@ namespace RegWatcher.Data
             };
             #endregion
             context.AddRange(docTypes);
+            context.SaveChanges();
+        }
+
+        public static void InitFormKinds(DataContext context)
+        {
+            #region FormKinds
+            List<FormKind> forms = new List<FormKind>()
+            {
+                new FormKind { FormKindId = 1, FormNameFull = "Акционерное общество", FormNameShort="АО"},
+                new FormKind { FormKindId = 2, FormNameFull = "Публичное Акционерное Общество", FormNameShort="ПАО"},
+                new FormKind { FormKindId = 3, FormNameFull = "Закрытое Акционерной Общество", FormNameShort="ЗАО"},
+                new FormKind { FormKindId = 4, FormNameFull = "Общество с Ограниченной Ответственностью", FormNameShort="ООО"},
+                new FormKind { FormKindId = 5, FormNameFull = "Индивидуальный Предприниматель", FormNameShort="ИП"},
+
+            };
+            #endregion
+            context.AddRange(forms);
+            context.SaveChanges();
+        }
+
+        public static void InitPositions(DataContext context)
+        {
+            #region Position
+            List<Position> Position = new List<Position>()
+            {
+                new Position { PositionId = 1, PositionName = "Директор"},
+                new Position { PositionId = 2, PositionName = "Генеральный директор"},
+                new Position { PositionId = 3, PositionName = "Начальник"},
+                new Position { PositionId = 4, PositionName = "Председатель"},
+                new Position { PositionId = 5, PositionName = "Руководитель"},
+                new Position { PositionId = 6, PositionName = "Специалист"},
+                new Position { PositionId = 7, PositionName = "Инспектор"},
+            };
+            #endregion
+            context.AddRange(Position);
             context.SaveChanges();
         }
     }

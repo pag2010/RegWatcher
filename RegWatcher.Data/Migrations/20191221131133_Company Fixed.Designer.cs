@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191221131133_Company Fixed")]
+    partial class CompanyFixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,22 +222,13 @@ namespace RegWatcher.Data.Migrations
 
                     b.Property<string>("ShortName");
 
-                    b.Property<int>("StepId");
-
-                    b.Property<DateTime?>("UpdateTime");
-
-                    b.Property<string>("UserId")
-                        .HasMaxLength(36);
+                    b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("CompanyId");
 
                     b.HasIndex("FormKindId");
 
                     b.HasIndex("PersonId");
-
-                    b.HasIndex("StepId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Companies");
                 });
@@ -511,15 +504,6 @@ namespace RegWatcher.Data.Migrations
                         .WithMany()
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegWatcher.Data.Step", "Step")
-                        .WithMany()
-                        .HasForeignKey("StepId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegWatcher.Data.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("RegWatcher.Data.Document", b =>

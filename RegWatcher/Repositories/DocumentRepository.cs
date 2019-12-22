@@ -1,4 +1,5 @@
 ﻿using RegWatcher.Data;
+using RegWatcher.Data.Enums;
 using RegWatcher.Interfaces.IRepositories;
 using RegWatcher.Models.ViewModels;
 using System;
@@ -56,6 +57,16 @@ namespace RegWatcher.Repositories
                         select document;
 
             return query;
+        }
+
+        public void ChangeDocumentStep(Document document, int stepId)
+        {
+            document.StepId = (Steps)stepId;
+        }
+
+        public void ChangeResponsibleUser(Document document, string userId)
+        {
+            document.ResponsibleUserId = userId;
         }
     }
 }

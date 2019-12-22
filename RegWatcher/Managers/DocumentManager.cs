@@ -64,5 +64,21 @@ namespace RegWatcher.Managers
                 .ToList();
         }
 
+        public Document GetDocumentById(int documentId)
+        {
+            return _documentRepository.GetDocument(documentId);
+        }
+
+        public void ChangeDocumentStep(Document document, int stepId)
+        {
+            _documentRepository.ChangeDocumentStep(document, stepId);
+            _context.SaveChanges();
+        }
+
+        public void ChangeResponsibleUser(Document document, ApplicationUser user)
+        {
+            _documentRepository.ChangeResponsibleUser(document, user.Id);
+            _context.SaveChanges();
+        }
     }
 }

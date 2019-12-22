@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191221080432_Position nullable")]
+    partial class Positionnullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,60 +188,6 @@ namespace RegWatcher.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RegWatcher.Data.Company", b =>
-                {
-                    b.Property<int>("CompanyId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Address");
-
-                    b.Property<string>("BusinessSubject");
-
-                    b.Property<string>("Comment");
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<string>("Email");
-
-                    b.Property<int>("FormKindId");
-
-                    b.Property<string>("FullName")
-                        .IsRequired();
-
-                    b.Property<string>("Inn")
-                        .IsRequired()
-                        .HasMaxLength(12);
-
-                    b.Property<string>("Kpp")
-                        .HasMaxLength(9);
-
-                    b.Property<string>("Ogrn")
-                        .HasMaxLength(15);
-
-                    b.Property<int>("PersonId");
-
-                    b.Property<string>("ShortName");
-
-                    b.Property<int>("StepId");
-
-                    b.Property<DateTime?>("UpdateTime");
-
-                    b.Property<string>("UserId")
-                        .HasMaxLength(36);
-
-                    b.HasKey("CompanyId");
-
-                    b.HasIndex("FormKindId");
-
-                    b.HasIndex("PersonId");
-
-                    b.HasIndex("StepId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Companies");
-                });
-
             modelBuilder.Entity("RegWatcher.Data.Document", b =>
                 {
                     b.Property<int>("DocumentId")
@@ -348,38 +296,16 @@ namespace RegWatcher.Data.Migrations
                     b.ToTable("FileExtensions");
                 });
 
-            modelBuilder.Entity("RegWatcher.Data.FormKind", b =>
-                {
-                    b.Property<int>("FormKindId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FormNameFull")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("FormNameShort")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.HasKey("FormKindId");
-
-                    b.ToTable("FormKinds");
-                });
-
             modelBuilder.Entity("RegWatcher.Data.Person", b =>
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
-
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<int>("PositionId");
+                    b.Property<int?>("PositionId");
 
                     b.Property<string>("SecondName");
 
@@ -500,28 +426,6 @@ namespace RegWatcher.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("RegWatcher.Data.Company", b =>
-                {
-                    b.HasOne("RegWatcher.Data.FormKind", "FormKind")
-                        .WithMany()
-                        .HasForeignKey("FormKindId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegWatcher.Data.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegWatcher.Data.Step", "Step")
-                        .WithMany()
-                        .HasForeignKey("StepId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegWatcher.Data.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("RegWatcher.Data.Document", b =>
                 {
                     b.HasOne("RegWatcher.Data.DocumentType", "DocumentType")
@@ -574,8 +478,7 @@ namespace RegWatcher.Data.Migrations
                 {
                     b.HasOne("RegWatcher.Data.Position", "Position")
                         .WithMany()
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PositionId");
                 });
 
             modelBuilder.Entity("RegWatcher.Data.ApplicationUser", b =>

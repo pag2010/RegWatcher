@@ -14,5 +14,7 @@ namespace RegWatcher.Interfaces.IRepositories
         Document GetDocument(string number);
         void AddDocumentToTag(Document document, Tag tag);
         IQueryable<Document> GetDocumentsByFilter(DocumentFilter filter);
+        void ChangeDocumentStep(Document document, int stepId);
+        void ChangeResponsibleUser(Document document, string userId);
     }
 }

@@ -13,7 +13,6 @@ using RegWatcher.Interfaces.IRepositories;
 using RegWatcher.Models.ViewModels;
 using RegWatcher.Notifiers;
 using RegWatcher.Notifiers.Email;
-using RegWatcher.Extensions;
 
 namespace RegWatcher.Controllers
 {
@@ -45,13 +44,18 @@ namespace RegWatcher.Controllers
             try
             {
                 _context.Database.BeginTransaction();
+                var userPerson = new Person()
+                {
+                    FirstName = user.FirstName.Trim(),
+                    SecondName = user.SecondName.Trim(),
+                    LastName = user.LastName != null ? user.LastName.Trim() : ""
+                };
+
                 var applicationUser = new ApplicationUser()
                 {
                     Email = user.Email,
                     UserName = user.Email,
-                    FirstName = user.FirstName.Trim(),
-                    SecondName = user.SecondName.Trim(),
-                    LastName = user.LastName != null ? user.LastName.Trim() : ""
+                    Person = userPerson
                 };
 
                 var regResult = await _userManager.CreateAsync(applicationUser, user.Password);
@@ -101,13 +105,27 @@ namespace RegWatcher.Controllers
             return res;
         }
 
-        /*[HttpPost]
-        public async Task<Microsoft.AspNetCore.Identity.SignInResult> Login(AuthenticationUser user)
+        [HttpGet]
+        [Authorize(Roles = "Administrator,HeadOfDepartment,Specialist")]
+        public async Task<JsonResult> ConfirmUser(string userId)
         {
-            var applicationUser = await _userManager.FindByEmailAsync(user.Email);
-            var r = await _signInManager.PasswordSignInAsync(applicationUser, user.Password, user.RememberMe, false);
-            return r;
-        }*/
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new Exception("Запрашиваемый пользователь не был найден");
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            _context.Database.BeginTransaction();
+            user.ConfirmedByUserId = currentUser.Id;
+            var res = await _userManager.AddToRoleAsync(user, "User");
+            if (!res.Succeeded)
+            {
+                _context.Database.RollbackTransaction();
+                throw new Exception("Не удалось подтвердить пользователя");
+            }
+            _context.SaveChanges();
+            _context.Database.CommitTransaction();
+            return new JsonResult(new { data = user.Id, success = true});
+        }
 
         [HttpPost]
         public async Task<RedirectResult> Login([FromBody]AuthenticationUser user, string returnUrl)
@@ -160,13 +178,6 @@ namespace RegWatcher.Controllers
             return await _userManager.RemoveFromRolesAsync(requestedUser, roles);
         }
 
-        /*[HttpGet]
-        [Authorize(Roles = "Administrator")]
-        public IEnumerable<ApplicationUserModel> GetUsers(int page, int countPerPage = 10)
-        {
-            return _userManager.GetPagedUsers(_userRepository, page, countPerPage);
-        }*/
-
         [HttpPost]
         [Authorize]
         public async Task<IdentityResult> ChangePassword([FromBody]string currentPassword, [FromBody]string newPassword )
@@ -184,23 +195,33 @@ namespace RegWatcher.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator,Specialist,HeadOfDepartment,Inspector")]
-        public IEnumerable<ApplicationUserModel> GetUsers(string filter)
+        public async Task<IEnumerable<ApplicationUserModel>> GetUsers(string filter, int page, int countPerPage=10)
         {
 
             var query = from user in _context.ApplicationUsers
-                            where user.Email.Contains(filter)
+                            where (filter == null || (user.Email.Contains(filter)
                         || user.Id.Contains(filter)
-                        || user.FirstName.Contains(filter)
-                        || user.SecondName.Contains(filter)
-                        || user.LastName.Contains(filter)
+                        || user.Person.FirstName.Contains(filter)
+                        || user.Person.SecondName.Contains(filter)
+                        || user.Person.LastName.Contains(filter)))
                         select new ApplicationUserModel
                         {
                             Email = user.Email,
                             IsEmailConfirmed = user.EmailConfirmed,
-                            Name = string.Format($"{user.FirstName} {user.SecondName} {user.LastName}").Trim(),
-                            UserId = user.Id
+                            Name = string.Format($"{user.Person.FirstName} {user.Person.SecondName} {user.Person.LastName}")
+                            .Trim(),
+                            UserId = user.Id,
+                            ConfirmedByUserId = user.ConfirmedByUserId
                         };
-            return query.ToList();
+
+            var res = query.Skip((page-1)*countPerPage).Take(countPerPage).ToList();
+            foreach (var r in res)
+            {
+                var user = await _userManager.FindByIdAsync(r.UserId);
+                r.Roles = await _userManager.GetRolesAsync(user);
+            }
+
+            return res;
         }
     }
 }
