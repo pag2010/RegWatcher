@@ -190,5 +190,21 @@ namespace RegWatcher.Data
             context.AddRange(Position);
             context.SaveChanges();
         }
+
+        public static void InitDangerKinds(DataContext context)
+        {
+            #region DangerKinds
+            List<DangerKind> dangerKinds = new List<DangerKind>()
+            {
+                new DangerKind { DangerKindId = 1, Name = "Не опасный"},
+                new DangerKind { DangerKindId = 2, Name = "Слабо опасный"},
+                new DangerKind { DangerKindId = 3, Name = "Средне опасный"},
+                new DangerKind { DangerKindId = 4, Name = "Опасный"},
+                new DangerKind { DangerKindId = 5, Name = "Крайне опасный"},
+            };
+            #endregion
+            context.AddRange(dangerKinds);
+            context.SaveChanges();
+        }
     }
 }

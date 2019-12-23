@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegWatcher.Data;
@@ -9,9 +10,10 @@ using RegWatcher.Data;
 namespace RegWatcher.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191223133942_GTS added")]
+    partial class GTSadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -444,8 +446,6 @@ namespace RegWatcher.Data.Migrations
                     b.Property<int>("SafetyDeclarationId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("DocumentId");
-
                     b.Property<DateTime>("EndDate");
 
                     b.Property<int>("GTSId");
@@ -453,8 +453,6 @@ namespace RegWatcher.Data.Migrations
                     b.Property<DateTime>("StartDate");
 
                     b.HasKey("SafetyDeclarationId");
-
-                    b.HasIndex("DocumentId");
 
                     b.HasIndex("GTSId");
 
@@ -650,10 +648,6 @@ namespace RegWatcher.Data.Migrations
 
             modelBuilder.Entity("RegWatcher.Data.SafetyDeclaration", b =>
                 {
-                    b.HasOne("RegWatcher.Data.Document", "Document")
-                        .WithMany()
-                        .HasForeignKey("DocumentId");
-
                     b.HasOne("RegWatcher.Data.GTS", "GTS")
                         .WithMany("SafetyDeclarations")
                         .HasForeignKey("GTSId")

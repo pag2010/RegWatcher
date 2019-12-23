@@ -120,7 +120,7 @@ namespace RegWatcher.Controllers
 
         [Authorize(Roles = "Inspector,Administrator,Specialist,HeadOfDepartment")]
         [HttpPost]
-        public IEnumerable<DocumentLiteModel> GetMyDocuments(DocumentFilter filter,
+        public IEnumerable<DocumentLiteModel> GetFiltredDocuments(DocumentFilter filter,
             int page, int countPerPage = 10)
         {
             return _documentManager.GetDocumentsByFilter(filter, page, countPerPage)

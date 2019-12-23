@@ -20,6 +20,9 @@ namespace RegWatcher.Data
         public DbSet<Person> Persons { get; set; }
         public DbSet<FormKind> FormKinds{get;set;}
         public DbSet<Company> Companies { get; set; }
+        public DbSet<SafetyDeclaration> SafetyDeclarations { get; set; }
+        public DbSet<GTS> GTSs { get; set; }
+        public DbSet<DangerKind> DangerKinds { get; set; }
  
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)

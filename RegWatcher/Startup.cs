@@ -53,6 +53,10 @@ namespace RegWatcher
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyManager, CompanyManager>();
+            services.AddScoped<IGTSManager, GTSManager>();
+            services.AddScoped<IGTSRepository, GTSRepository>();
+            services.AddScoped<ISafetyDeclarationManager, SafetyDeclarationManager>();
+            services.AddScoped<ISafetyDeclarationRepository, SafetyDeclarationRepository>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
