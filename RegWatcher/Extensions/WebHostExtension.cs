@@ -59,6 +59,8 @@ namespace RegWatcher
                             DataSeeder.InitFormKinds(context);
                         if (!context.DangerKinds.Any())
                             DataSeeder.InitDangerKinds(context);
+                        if (!context.CheckingKinds.Any())
+                            DataSeeder.InitCheckingKinds(context);
                     }
                 }
 

@@ -206,5 +206,21 @@ namespace RegWatcher.Data
             context.AddRange(dangerKinds);
             context.SaveChanges();
         }
+
+        public static void InitCheckingKinds(DataContext context)
+        {
+            #region DangerKinds
+            List<CheckingKind> checkingKinds = new List<CheckingKind>()
+            {
+                new CheckingKind { CheckingKindId = 1, Name = "Плановая"},
+                new CheckingKind { CheckingKindId = 2, Name = "Внеплановая"},
+                new CheckingKind { CheckingKindId = 3, Name = "По предписанию"},
+                new CheckingKind { CheckingKindId = 4, Name = "Документарная"},
+                new CheckingKind { CheckingKindId = 5, Name = "Бездокументарная"},
+            };
+            #endregion
+            context.AddRange(checkingKinds);
+            context.SaveChanges();
+        }
     }
 }

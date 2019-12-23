@@ -23,7 +23,12 @@ namespace RegWatcher.Data
         public DbSet<SafetyDeclaration> SafetyDeclarations { get; set; }
         public DbSet<GTS> GTSs { get; set; }
         public DbSet<DangerKind> DangerKinds { get; set; }
- 
+        public DbSet<Checking> Checkings { get; set; }
+        public DbSet<CheckingKind> CheckingKinds { get; set; }
+        public DbSet<CheckingResult> CheckingResults { get; set; }
+        public DbSet<Act> Acts { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set;}
+
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
