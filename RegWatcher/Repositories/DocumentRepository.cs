@@ -68,5 +68,15 @@ namespace RegWatcher.Repositories
         {
             document.ResponsibleUserId = userId;
         }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return _context.SaveChangesAsync();
+        }
     }
 }

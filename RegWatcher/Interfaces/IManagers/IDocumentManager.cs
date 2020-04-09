@@ -22,5 +22,7 @@ namespace RegWatcher.Interfaces.IManagers
         void ChangeDocumentStep(Document document, int stepId);
 
         void ChangeResponsibleUser(Document document, ApplicationUser user);
+
+        Document GetDocument(string documentNumber);
     }
 }

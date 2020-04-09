@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RegWatcher.Interfaces.IRepositories
 {
-    public interface IDocumentRepository
+    public interface IDocumentRepository : IRepository
     {
         Task AddDocumentAsync(Document document);
         Document GetDocument(int documentId);

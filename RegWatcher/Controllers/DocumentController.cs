@@ -77,7 +77,7 @@ namespace RegWatcher.Controllers
         [HttpGet]
         public DocumentLiteModel LoadByNumber(string documentNumber)
         {
-            var document = _documentRepository.GetDocument(documentNumber);
+            var document = _documentManager.GetDocument(documentNumber);
 
             return new DocumentLiteModel(document, 
                 string.Format($"{document.File.FileName}{document.File.FileExtension.ExtensionName}"),

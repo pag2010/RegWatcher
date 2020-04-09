@@ -28,7 +28,7 @@ namespace RegWatcher.Managers
 
         public async Task AddDocumentAsync(Document document)
         {
-            if (_context.Documents.Any(d=>d.Number.ToLower() == document.Number.ToLower()))
+            if (_documentRepository.GetDocument(document.Number) != null)
             {
                 throw new Exception($"Документ с номером {document.Number} уже существует");
             }
@@ -72,13 +72,18 @@ namespace RegWatcher.Managers
         public void ChangeDocumentStep(Document document, int stepId)
         {
             _documentRepository.ChangeDocumentStep(document, stepId);
-            _context.SaveChanges();
+            _documentRepository.SaveChanges();
         }
 
         public void ChangeResponsibleUser(Document document, ApplicationUser user)
         {
             _documentRepository.ChangeResponsibleUser(document, user.Id);
             _context.SaveChanges();
+        }
+
+        public Document GetDocument(string documentNumber)
+        {
+            return _documentRepository.GetDocument(documentNumber);
         }
     }
 }

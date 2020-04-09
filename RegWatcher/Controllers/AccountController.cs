@@ -101,7 +101,7 @@ namespace RegWatcher.Controllers
             var user = await _userManager.GetUserAsync(User);
             var res = await _userManager.ConfirmEmailAsync(user, data.Token);
             if (res.Succeeded)
-                return await _userManager.AddToRoleAsync(user, Roles.Administrator.ToString());
+                return await _userManager.AddToRoleAsync(user, Roles.User.ToString());
             return res;
         }
 

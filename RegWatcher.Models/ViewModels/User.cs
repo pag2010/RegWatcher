@@ -13,7 +13,7 @@ namespace RegWatcher.Models.ViewModels
 
         [Required]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessage = "Пароль должен содержать цифры, буквы разных регистров и знаки препинания. Минимальная длина 8")]
         public string Password { get; set; }
     }
 }
