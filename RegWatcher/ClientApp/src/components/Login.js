@@ -11,7 +11,7 @@ const Login = props => (
 );
 
 export default connect()(Login);*/
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -24,7 +24,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import axios from 'axios'
+import axios from 'axios';
+import Alert from '@material-ui/lab/Alert';
+import {
+    Redirect
+} from 'react-router-dom'
 
 export default function Login() {
 
@@ -45,11 +49,25 @@ export default function Login() {
         },
         marginButton: {
             marginTop: '5%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         divCenter: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+        },
+        inputCenter: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        errorCenter: {
+            //display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '5%'
         }
     }));
 
@@ -59,6 +77,7 @@ export default function Login() {
         password: '',
         showPassword: false,
         email: '',
+        errors: [],
     });
 
     const handleChange = prop => event => {
@@ -73,22 +92,78 @@ export default function Login() {
         event.preventDefault();
     };
 
-     var handleLogin = useEffect(() => {
-            axios.post('/api/Account/Login', JSON.parse('{ "email": "values.email", "password": "values.password" }'))
+
+    function ErrorAlert(props) {
+        let alerts = []
+        for (var i in props.errors) {
+            alerts.push(
+                <div className={classes.errorCenter}>
+                    <Alert severity="error">{props.errors[i]}</Alert>
+                </div>
+            )
+        }
+        if (props.errors.length > 0 || props.errors != null)
+            if (props.errors.length) 
+                return alerts
+            else
+                return <div />
+        else
+           return <div/>
+    }
+
+    function LoginBtn(props) {
+        const [result, setCount] = useState({ success: false, errors: [] });
+        
+        const handleLogin = () => {
+            let params = {
+                email: values.email,
+                password: values.password,
+                rememberMe: false
+            };
+            axios.post('/api/Account/Login', params)
                 .then(function (res) {
-                    alert('you win')
+                    console.log(res.data)
+                    setCount({ success: res.data.success, errors: [res.data.message]})
                 })
                 .catch(function (err) {
-                    alert(err)
+                    console.log(err.response.data)
+                    var messages = []
+                    if (err.response.data.length) {
+                        for (var i in err.response.data) {
+                            messages.push(err.response.data[i].errorMessage)
+                        }
+                    } else {
+                        messages.push(err.response.data.message)
+                    }
+                    setCount({ success: false, errors: messages })
                 });
-        })
+        }
+        return (
+            <div>
+            <div className={classes.divCenter}>
+                <Button variant="contained" color="primary" onClick={handleLogin} className={classes.marginButton}>
+                    Войти
+                </Button>
+             </div>
+                {result.success &&
+                    <Redirect to={"/Home/"} />
+                }
+                {result.errors != null &&
+                    <div className={classes.errorCenter}>
+                        <ErrorAlert errors={result.errors} />
+                </div>
+                }
+            </div>
+            );
+    }
+    
 
     return (
         <div className={classes.fillWindowContent}>
             <div className={classes.alignItemsAndJustifyContent}>
                 <div>
-                    <div>
-                        <Grid container spacing={1} alignItems="flex-end">
+                    <div className={classes.inputCenter}>
+                        <Grid container spacing={1} className={classes.inputCenter}>
                             <Grid item>
                                 <TextField id="email-field" label="Email" onChange={handleChange('email')}/>
                             </Grid>
@@ -97,11 +172,11 @@ export default function Login() {
                             </Grid>
                         </Grid>
                     </div>
-                    <div>
-                        <TextField
+                    <div className={classes.inputCenter}>
+                        <TextField 
                             id="outlined-adornment-password"
                             type={values.showPassword ? 'text' : 'password'}
-                            label="Password"
+                            label="Пароль"
                             value={values.password}
                             onChange={handleChange('password')}
                             InputProps={{
@@ -120,11 +195,7 @@ export default function Login() {
                             }}
                         />
                     </div>
-                    <div className={classes.divCenter}>
-                        <Button variant="contained" color="primary" onClick={handleLogin} className={classes.marginButton}>
-                            LogIn
-                        </Button>
-                    </div>
+                    <LoginBtn/>
                 </div>
             </div>
         </div>

@@ -43,7 +43,7 @@ namespace RegWatcher.Managers
         public Company ChangeCompanyStep(Company company, int stepId)
         {
             _companyRepository.ChangeCompanyStep(company, stepId);
-            _context.SaveChanges();
+            _companyRepository.SaveChanges();
             return company;
         }
 

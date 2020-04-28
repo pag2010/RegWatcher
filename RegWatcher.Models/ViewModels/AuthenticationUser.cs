@@ -5,8 +5,14 @@ using System.Text;
 
 namespace RegWatcher.Models.ViewModels
 {
-    public class AuthenticationUser : User
+    public class AuthenticationUser
     {
-       public bool RememberMe { get; set; }
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

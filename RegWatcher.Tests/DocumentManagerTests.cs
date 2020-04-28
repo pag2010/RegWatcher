@@ -23,6 +23,8 @@ namespace RegWatcher.Tests
         private readonly Mock<IDocumentRepository> _documentRepository = new Mock<IDocumentRepository>();
         private Document document = new Document() { Number = ExistingNumber, DocumentId = 1, StepId = Steps.Accepted };
         private DocumentFilter filter = new DocumentFilter() { IsOwner = true };
+        private ApplicationUser user = new ApplicationUser() { Id = "72af2e71-1429-4d79-ad75-87ea557885b3" };
+
         [SetUp]
         public void Setup()
         {
@@ -47,9 +49,11 @@ namespace RegWatcher.Tests
         [Test]
         public void TestChangeDocumentStep()
         {
+            _documentRepository.Setup(d => d.SaveChanges());
+            _documentRepository.Setup(d => d.ChangeDocumentStep(document, (int)Steps.Completed));
             IDocumentManager manager = new DocumentManager(_documentRepository.Object, null, null, null);
-            manager.ChangeDocumentStep(document, (int)Steps.Accepted);
-            Assert.That(document.StepId, Is.EqualTo(Steps.Accepted));
+            manager.ChangeDocumentStep(document, (int)Steps.Completed);
+            _documentRepository.Verify();
         }
 
         [Test]
@@ -69,8 +73,16 @@ namespace RegWatcher.Tests
             {
                 if (result[i].DocumentId != queryList[(page - 1) * count + i].DocumentId)
                     Assert.Fail("Найдено несовпадение в ожидаемом списке и полученном");
-            }
-            
+            } 
+        }
+
+        [Test]
+        public void TestChangeDocumentResponsibleUser()
+        {
+            _documentRepository.Setup(d=>d.ChangeResponsibleUser(document, user.Id));
+            IDocumentManager manager = new DocumentManager(_documentRepository.Object, null, null, null);
+            manager.ChangeResponsibleUser(document, user);
+            _documentRepository.Verify(dr=>dr.ChangeResponsibleUser(It.IsAny<Document>(), user.Id));
         }
     }
 }

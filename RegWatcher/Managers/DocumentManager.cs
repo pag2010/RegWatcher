@@ -40,7 +40,7 @@ namespace RegWatcher.Managers
             foreach (var t in tags)
             {
                 if (document.DocumentTags.Any(dt => dt.TagId == t.TagId))
-                    break;
+                    continue;
                 _documentRepository.AddDocumentToTag(document, t);
                 _context.SaveChanges();
             }
@@ -78,7 +78,7 @@ namespace RegWatcher.Managers
         public void ChangeResponsibleUser(Document document, ApplicationUser user)
         {
             _documentRepository.ChangeResponsibleUser(document, user.Id);
-            _context.SaveChanges();
+            _documentRepository.SaveChanges();
         }
 
         public Document GetDocument(string documentNumber)

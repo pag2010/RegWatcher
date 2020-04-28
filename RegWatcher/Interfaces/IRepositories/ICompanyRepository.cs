@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RegWatcher.Interfaces.IRepositories
 {
-    public interface ICompanyRepository
+    public interface ICompanyRepository : IRepository
     {
         void AddCompany(Company company);
         IQueryable<Company> GetCompanies(CompanyFilter filter);

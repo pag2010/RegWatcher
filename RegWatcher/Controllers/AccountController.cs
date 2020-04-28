@@ -128,14 +128,14 @@ namespace RegWatcher.Controllers
         }
 
         [HttpPost]
-        public async Task<RedirectResult> Login([FromBody]AuthenticationUser user, string returnUrl)
+        public async Task<JsonResult> Login([FromBody]AuthenticationUser user, string returnUrl)
         {
             var applicationUser = await _userManager.FindByEmailAsync(user.Email);
             var r = await _signInManager.PasswordSignInAsync(applicationUser, user.Password, user.RememberMe, false);
             if (!r.Succeeded)
                 throw new Exception("Пользователь не найден или неверно указаны почта или пароль");
 
-            return Redirect(string.IsNullOrEmpty(returnUrl) ? "/Home/" : returnUrl);
+            return new JsonResult(new { success = true });
         }
 
         [HttpGet]

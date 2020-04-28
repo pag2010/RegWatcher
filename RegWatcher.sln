@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegWatcher.Data", "RegWatch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegWatcher.Models", "RegWatcher.Models\RegWatcher.Models.csproj", "{AF443D41-7B48-465B-B6AB-74602943B2E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegWatcher.Tests", "RegWatcher.Tests\RegWatcher.Tests.csproj", "{9BF02CBE-8BB7-438C-A131-18A8040E00F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegWatcher.Tests", "RegWatcher.Tests\RegWatcher.Tests.csproj", "{9BF02CBE-8BB7-438C-A131-18A8040E00F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessingConsole", "ProcessingConsole\ProcessingConsole.csproj", "{421E92AC-BCA9-4292-85B6-F716254A135C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9BF02CBE-8BB7-438C-A131-18A8040E00F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BF02CBE-8BB7-438C-A131-18A8040E00F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BF02CBE-8BB7-438C-A131-18A8040E00F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{421E92AC-BCA9-4292-85B6-F716254A135C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{421E92AC-BCA9-4292-85B6-F716254A135C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{421E92AC-BCA9-4292-85B6-F716254A135C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{421E92AC-BCA9-4292-85B6-F716254A135C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

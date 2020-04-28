@@ -64,5 +64,15 @@ namespace RegWatcher.Repositories
         {
             return _context.Companies.Where(c => c.CompanyId == companyId).SingleOrDefault();
         }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return _context.SaveChangesAsync();
+        }
     }
 }

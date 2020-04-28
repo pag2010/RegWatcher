@@ -86,9 +86,9 @@ namespace RegWatcher.Controllers
 
         [Authorize(Roles = "Administrator,Specialist,Inspector,HeadOfDepartment")]
         [HttpGet]
-        public DocumentLiteModel LoadById(int documentId)
+        public async Task<DocumentLiteModel> LoadById(int documentId)
         {
-            var document = _documentRepository.GetDocument(documentId);
+            var document = await Task.Run(() => _documentRepository.GetDocument(documentId));
 
             return new DocumentLiteModel(document, 
                 string.Format($"{document.File.FileName}{document.File.FileExtension.ExtensionName}"),
