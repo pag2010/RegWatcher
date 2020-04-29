@@ -1,23 +1,163 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
+import { Link } from 'react-router-dom';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import HomeIcon from '@material-ui/icons/Home';
+import { Container } from 'reactstrap';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import WorkIcon from '@material-ui/icons/Work';
 
-const Home = props => (
-  <div>
-    <h1>Hello, world!</h1>
-    <p>Welcome to your new single-page application, built with:</p>
-    <ul>
-      <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-      <li><a href='https://facebook.github.io/react/'>React</a> and <a href='https://redux.js.org/'>Redux</a> for client-side code</li>
-      <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-    </ul>
-    <p>To help you get started, we've also set up:</p>
-    <ul>
-      <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-      <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-      <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-    </ul>
-    <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-  </div>
-);
+const drawerWidth = 240;
 
-export default connect()(Home);
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: '15%',
+    },
+    drawerContainer: {
+        overflow: 'auto',
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+    container: {
+        padding: 0
+    }
+}));
+
+const options = [
+    'Show some love to Material-UI',
+    <ListItem button component={Link} to="/Account/Registration">
+        <ListItemIcon> <PersonAddIcon /> </ListItemIcon>
+        <ListItemText primary='Регистрация пользователя' />
+    </ListItem>,
+    'Show all notification content',
+    'Hide sensitive notification content',
+    'Hide all notification content',
+];
+
+export default function Home(props) {
+    const classes = useStyles();
+    const [loginPage, changeState] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+    useEffect(() => {
+        var r = window.location.pathname
+        console.log(r)
+        if (r == "/Account/Login") {
+            changeState(true)
+            console.log('loginPage changed to true')
+        }
+        else {
+            changeState(false)
+            console.log('loginPage changed to false')
+        }    
+    });
+
+    const handleClickManagement = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleMenuItemClick = (event, index) => {
+        setSelectedIndex(index);
+        setAnchorEl(null);
+    };
+
+    return (
+        <div className={classes.root}>
+            
+                <div>
+                <CssBaseline />
+                {!loginPage &&
+                    <Drawer
+                        className={classes.drawer}
+                        variant="permanent"
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                    >
+                        <Toolbar />
+                        <div className={classes.drawerContainer}>
+                            <List>
+                            <ListItem
+                                button
+                                aria-haspopup="true"
+                                aria-controls="lock-menu"
+                                onClick={handleClickManagement}>
+                                <ListItemIcon> <WorkIcon /> </ListItemIcon>
+                                    <ListItemText primary='Управление' />
+                            </ListItem>
+                            <Menu
+                                id="lock-menu"
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                {options.map((option, index) => (
+                                    <MenuItem
+                                        key={option}
+                                        disabled={index === 0}
+                                        selected={index === selectedIndex}
+                                        onClick={(event) => handleMenuItemClick(event, index)}
+                                    >
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                            </List>
+                            <Divider />
+                        <List>
+                            <ListItem button component={Link} to="/Home">
+                                <ListItemIcon> <HomeIcon /> </ListItemIcon>
+                                <ListItemText primary='Домой' />
+                            </ListItem>
+                            <ListItem button component={Link} to="/Account/Login">
+                                <ListItemIcon> <MeetingRoomIcon /> </ListItemIcon>
+                                    <ListItemText primary='Вход' />
+                            </ListItem>
+                            </List>
+                        </div>
+                </Drawer>
+                }
+                    <main className={classes.content}>
+                        <Toolbar />
+                    <Container className={classes.container}>
+                        {props.children}
+                    </Container>
+                    </main>
+                </div>
+            
+        </div>
+    );
+}

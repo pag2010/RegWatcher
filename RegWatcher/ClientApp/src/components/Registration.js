@@ -1,17 +1,4 @@
-﻿/*import React from 'react';
-import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
-
-const Login = props => (
-    <div>
-        <Button variant="contained" color="primary">
-            Войти
-        </Button>
-    </div>
-);
-
-export default connect()(Login);*/
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -30,7 +17,7 @@ import {
     Redirect
 } from 'react-router-dom'
 
-export default function Login() {
+export default function Registration() {
 
     const useStyles = makeStyles(theme => ({
         alignItemsAndJustifyContent: {
@@ -103,17 +90,17 @@ export default function Login() {
             )
         }
         if (props.errors.length > 0 || props.errors != null)
-            if (props.errors.length) 
+            if (props.errors.length)
                 return alerts
             else
                 return <div />
         else
-           return <div/>
+            return <div />
     }
 
     function LoginBtn(props) {
         const [result, setCount] = useState({ success: false, errors: [] });
-        
+
         const handleLogin = () => {
             let params = {
                 email: values.email,
@@ -123,7 +110,7 @@ export default function Login() {
             axios.post('/api/Account/Login', params)
                 .then(function (res) {
                     console.log(res.data)
-                    setCount({ success: res.data.success, errors: [res.data.message]})
+                    setCount({ success: res.data.success, errors: [res.data.message] })
                 })
                 .catch(function (err) {
                     console.log(err.response.data)
@@ -140,23 +127,23 @@ export default function Login() {
         }
         return (
             <div>
-            <div className={classes.divCenter}>
-                <Button variant="contained" color="primary" onClick={handleLogin} className={classes.marginButton}>
-                    Войти
+                <div className={classes.divCenter}>
+                    <Button variant="contained" color="primary" onClick={handleLogin} className={classes.marginButton}>
+                        Войти
                 </Button>
-             </div>
+                </div>
                 {result.success &&
                     <Redirect to={"/Home/"} />
                 }
                 {result.errors != null &&
                     <div className={classes.errorCenter}>
                         <ErrorAlert errors={result.errors} />
-                </div>
+                    </div>
                 }
             </div>
-            );
+        );
     }
-    
+
 
     return (
         <div className={classes.fillWindowContent}>
@@ -165,7 +152,15 @@ export default function Login() {
                     <div className={classes.inputCenter}>
                         <Grid container spacing={1} className={classes.inputCenter}>
                             <Grid item>
-                                <TextField id="email-field" label="Email" onChange={handleChange('email')}/>
+                                <TextField
+                                    
+                                    id="email-field"
+                                    label="Error"
+                                    defaultValue="Hello World"
+                                    helperText="Incorrect entry."
+                                    onChange={handleChange('email')}
+                                />
+                                <TextField id="email-field" label="Email" onChange={handleChange('email')} />
                             </Grid>
                             <Grid item className={classes.marginIcon}>
                                 <AccountCircle />
@@ -173,7 +168,7 @@ export default function Login() {
                         </Grid>
                     </div>
                     <div className={classes.inputCenter}>
-                        <TextField 
+                        <TextField
                             id="outlined-adornment-password"
                             type={values.showPassword ? 'text' : 'password'}
                             label="Пароль"
@@ -195,7 +190,7 @@ export default function Login() {
                             }}
                         />
                     </div>
-                    <LoginBtn/>
+                    <LoginBtn />
                 </div>
             </div>
         </div>
