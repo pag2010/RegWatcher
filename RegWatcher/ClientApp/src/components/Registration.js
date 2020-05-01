@@ -20,6 +20,10 @@ import {
 export default function Registration() {
 
     const useStyles = makeStyles(theme => ({
+        root: {
+            ...theme.typography.button,
+            padding: theme.spacing(1),
+        },
         alignItemsAndJustifyContent: {
             display: 'flex',
             alignItems: 'center',
@@ -64,11 +68,26 @@ export default function Registration() {
         password: '',
         showPassword: false,
         email: '',
+        firstName: '',
+        secondName: '',
+        lastName: '',
+        confirmPassword: '',
         errors: [],
+        emailLabel: 'Email',
+        emailError: ''
     });
 
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
+        if (prop == 'email') {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!re.test(String(event.target.value).toLowerCase())) {
+                setValues({ ...values, ['emailLabel']: 'Ошибка email', ['emailError']: 'Некорректный email', [prop]: event.target.value});
+            }
+            else {
+                setValues({ ...values, ['emailLabel']: 'Email', ['emailError']: '', [prop]: event.target.value });
+            }
+        }
     };
 
     const handleClickShowPassword = () => {
@@ -78,7 +97,6 @@ export default function Registration() {
     const handleMouseDownPassword = event => {
         event.preventDefault();
     };
-
 
     function ErrorAlert(props) {
         let alerts = []
@@ -98,16 +116,20 @@ export default function Registration() {
             return <div />
     }
 
-    function LoginBtn(props) {
+    function RegBtn(props) {
         const [result, setCount] = useState({ success: false, errors: [] });
 
         const handleLogin = () => {
             let params = {
                 email: values.email,
                 password: values.password,
+                confirmPassword: values.confirmPassword,
+                firstName: values.firstName,
+                secondName: values.secondName,
+                lastName: values.lastName,
                 rememberMe: false
             };
-            axios.post('/api/Account/Login', params)
+            axios.post('/api/Account/Registration', params)
                 .then(function (res) {
                     console.log(res.data)
                     setCount({ success: res.data.success, errors: [res.data.message] })
@@ -128,7 +150,7 @@ export default function Registration() {
         return (
             <div>
                 <div className={classes.divCenter}>
-                    <Button variant="contained" color="primary" onClick={handleLogin} className={classes.marginButton}>
+                    <Button variant="contained" color="primary" onClick={handleLogin} className={classes.marginButton} disabled={!values.emailError == ''}>
                         Войти
                 </Button>
                 </div>
@@ -149,18 +171,41 @@ export default function Registration() {
         <div className={classes.fillWindowContent}>
             <div className={classes.alignItemsAndJustifyContent}>
                 <div>
+                    <div className={classes.root}>{"Регистрация нового пользователя"}</div>
                     <div className={classes.inputCenter}>
                         <Grid container spacing={1} className={classes.inputCenter}>
                             <Grid item>
-                                <TextField
-                                    
-                                    id="email-field"
-                                    label="Error"
-                                    defaultValue="Hello World"
-                                    helperText="Incorrect entry."
-                                    onChange={handleChange('email')}
-                                />
-                                <TextField id="email-field" label="Email" onChange={handleChange('email')} />
+                                <TextField id="email-field" label={values.emailLabel} onChange={handleChange('email')} helperText={values.emailError}/>
+                            </Grid>
+                            <Grid item className={classes.marginIcon}>
+                                <AccountCircle />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className={classes.inputCenter}>
+                        <Grid container spacing={1} className={classes.inputCenter}>
+                            <Grid item>
+                                <TextField id="firstName-field" label="Имя" onChange={handleChange('firstName')} />
+                            </Grid>
+                            <Grid item className={classes.marginIcon}>
+                                <AccountCircle />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className={classes.inputCenter}>
+                        <Grid container spacing={1} className={classes.inputCenter}>
+                            <Grid item>
+                                <TextField id="secondName-field" label="Фамилия" onChange={handleChange('secondName')} />
+                            </Grid>
+                            <Grid item className={classes.marginIcon}>
+                                <AccountCircle />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className={classes.inputCenter}>
+                        <Grid container spacing={1} className={classes.inputCenter}>
+                            <Grid item>
+                                <TextField id="lastName-field" label="Отчество" onChange={handleChange('lastName')} />
                             </Grid>
                             <Grid item className={classes.marginIcon}>
                                 <AccountCircle />
@@ -190,7 +235,30 @@ export default function Registration() {
                             }}
                         />
                     </div>
-                    <LoginBtn />
+                    <div className={classes.inputCenter}>
+                        <TextField
+                            id="outlined-adornment-password"
+                            type={values.showPassword ? 'text' : 'password'}
+                            label="Подтверждение пароля"
+                            value={values.confirmPassword}
+                            onChange={handleChange('confirmPassword')}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                        >
+                                            {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </div>
+                    <RegBtn />
                 </div>
             </div>
         </div>

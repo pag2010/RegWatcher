@@ -21,6 +21,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import WorkIcon from '@material-ui/icons/Work';
+import axios from 'axios';
+import {
+    Redirect
+} from 'react-router-dom'
 
 const drawerWidth = 240;
 
@@ -61,24 +65,64 @@ const options = [
     'Hide all notification content',
 ];
 
+
 export default function Home(props) {
     const classes = useStyles();
     const [loginPage, changeState] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [requestStatus, setRequestStatus] = useState(0);
+    const [roles, setRoles] = useState([]);
+    const [location, setLocation] = useState('');
+
+    
+
+    const connectOpen = async () => {
+        var res = 0;
+        try {
+            var kek = await axios.get('/api/Account/GetMyRoles')
+        }
+        catch (ex) {
+            console.log('err')
+        }
+        //res = kek.status;
+        setRequestStatus(200)
+    }
+
 
     useEffect(() => {
         var r = window.location.pathname
-        console.log(r)
-        if (r == "/Account/Login") {
-            changeState(true)
-            console.log('loginPage changed to true')
+        setLocation(r);
+        //connectOpen()
+        if (requestStatus == 0 )
+            axios.get('/api/Account/GetMyRoles')
+                .then(function (res) {
+                    setRequestStatus(200)
+                    var rroles = res.data
+                    setRoles(rroles);
+                    //console.log(roles)
+                })
+                .catch(function (err) {
+                    if (err.response.status == 401)
+                        setRequestStatus(err.response.status)
+                    if (err.response.status == 400)
+                        setRequestStatus(err.response.status)
+                })
+                .then(function (data) {
+                    console.log(data)
+                });
+        switch (requestStatus) {
+            case 401:
+                console.log("Ошибка авторизации")
+                break;
+            case 400:
+                console.log("Неизвестная ошибка")
+                break;
+            case 200:
+                console.log("Ошибок нет")
+                break;
         }
-        else {
-            changeState(false)
-            console.log('loginPage changed to false')
-        }    
-    });
+    }, []);
 
     const handleClickManagement = (event) => {
         setAnchorEl(event.currentTarget);
@@ -95,10 +139,12 @@ export default function Home(props) {
 
     return (
         <div className={classes.root}>
-            
+            {(requestStatus == 401 && location != "/Account/Login") &&
+                <Redirect to={"/Account/Login"} />
+            }
                 <div>
                 <CssBaseline />
-                {!loginPage &&
+                {location != "/Account/Login" && (requestStatus == 200 || requestStatus == 0) &&
                     <Drawer
                         className={classes.drawer}
                         variant="permanent"
@@ -106,35 +152,39 @@ export default function Home(props) {
                             paper: classes.drawerPaper,
                         }}
                     >
-                        <Toolbar />
+                    <Toolbar />
                         <div className={classes.drawerContainer}>
-                            <List>
-                            <ListItem
-                                button
-                                aria-haspopup="true"
-                                aria-controls="lock-menu"
-                                onClick={handleClickManagement}>
-                                <ListItemIcon> <WorkIcon /> </ListItemIcon>
+                        <List>
+                            {roles.includes('Administrator') &&
+                                <div>
+                                <ListItem
+                                    button
+                                    aria-haspopup="true"
+                                    aria-controls="lock-menu"
+                                    onClick={handleClickManagement}>
+                                    <ListItemIcon> <WorkIcon /> </ListItemIcon>
                                     <ListItemText primary='Управление' />
-                            </ListItem>
-                            <Menu
-                                id="lock-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                {options.map((option, index) => (
-                                    <MenuItem
-                                        key={option}
-                                        disabled={index === 0}
-                                        selected={index === selectedIndex}
-                                        onClick={(event) => handleMenuItemClick(event, index)}
-                                    >
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                            </Menu>
+                                </ListItem>
+                                <Menu
+                                    id="lock-menu"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    {options.map((option, index) => (
+                                        <MenuItem
+                                            key={option}
+                                            disabled={index === 0}
+                                            selected={index === selectedIndex}
+                                            onClick={(event) => handleMenuItemClick(event, index)}
+                                        >
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                                </div>
+                            }
                             </List>
                             <Divider />
                         <List>
@@ -144,17 +194,19 @@ export default function Home(props) {
                             </ListItem>
                             <ListItem button component={Link} to="/Account/Login">
                                 <ListItemIcon> <MeetingRoomIcon /> </ListItemIcon>
-                                    <ListItemText primary='Вход' />
+                                    <ListItemText primary='Выход' />
                             </ListItem>
                             </List>
                         </div>
                 </Drawer>
                 }
                     <main className={classes.content}>
-                        <Toolbar />
-                    <Container className={classes.container}>
-                        {props.children}
-                    </Container>
+                    <Toolbar />
+                    {
+                        <Container className={classes.container}>
+                            {props.children}
+                        </Container>
+                    }
                     </main>
                 </div>
             

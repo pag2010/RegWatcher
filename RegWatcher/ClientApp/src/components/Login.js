@@ -146,7 +146,7 @@ export default function Login() {
                 </Button>
              </div>
                 {result.success &&
-                    <Redirect to={"/Home/"} />
+                    <Redirect to={"/Home"} />
                 }
                 {result.errors != null &&
                     <div className={classes.errorCenter}>

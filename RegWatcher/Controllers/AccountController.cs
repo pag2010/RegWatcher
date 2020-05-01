@@ -72,8 +72,8 @@ namespace RegWatcher.Controllers
                 }
                 else
                 {
-                    _context.Database.RollbackTransaction();
-                    throw new Exception("Ошибка при регистрации пользователя");
+                    //_context.Database.RollbackTransaction();
+                    throw new Exception("Пользователь уже зарегистрирован");
                 }
                 
             }
