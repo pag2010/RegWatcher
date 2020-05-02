@@ -123,7 +123,7 @@ export default function Login() {
             axios.post('/api/Account/Login', params)
                 .then(function (res) {
                     console.log(res.data)
-                    setCount({ success: res.data.success, errors: [res.data.message]})
+                    setCount({ success: res.data.success })
                 })
                 .catch(function (err) {
                     console.log(err.response.data)
@@ -145,13 +145,11 @@ export default function Login() {
                     Войти
                 </Button>
              </div>
-                {result.success &&
-                    <Redirect to={"/Home"} />
-                }
-                {result.errors != null &&
-                    <div className={classes.errorCenter}>
+                {result.success
+                    ? <Redirect to={"/Home"} />
+                    : <div className={classes.errorCenter}>
                         <ErrorAlert errors={result.errors} />
-                </div>
+                       </div>
                 }
             </div>
             );

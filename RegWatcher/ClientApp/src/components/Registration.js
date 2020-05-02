@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
 import {
     Redirect
 } from 'react-router-dom'
@@ -116,6 +117,17 @@ export default function Registration() {
             return <div />
     }
 
+    function SuccessAlert(props) {
+        return (<div className={classes.errorCenter}>
+            <Alert severity="success">{props.message}</Alert>
+        </div>)
+    }
+    function InfoAlert(props) {
+        return (<div className={classes.errorCenter}>
+            <Alert severity="info">{props.message}</Alert>
+        </div>)
+    }
+
     function RegBtn(props) {
         const [result, setCount] = useState({ success: false, errors: [] });
 
@@ -132,7 +144,10 @@ export default function Registration() {
             axios.post('/api/Account/Registration', params)
                 .then(function (res) {
                     console.log(res.data)
-                    setCount({ success: res.data.success, errors: [res.data.message] })
+                    var message = ''
+                    if (res.data.message)
+                        message = res.data.message
+                    setCount({ success: res.data.success, errors: [message] })
                 })
                 .catch(function (err) {
                     console.log(err.response.data)
@@ -154,10 +169,16 @@ export default function Registration() {
                         Войти
                 </Button>
                 </div>
-                {result.success &&
-                    <Redirect to={"/Home/"} />
-                }
-                {result.errors != null &&
+                {result.success
+                    ? <div>
+                        <div className={classes.errorCenter}>
+                            <SuccessAlert message={"Новый пользователь создан."} />
+                        </div>
+                        <div className={classes.errorCenter}>
+                            <InfoAlert message={"Новый пользователь должен подвердить свой email."} />
+                        </div>
+                    </div>
+                    :
                     <div className={classes.errorCenter}>
                         <ErrorAlert errors={result.errors} />
                     </div>
@@ -178,7 +199,7 @@ export default function Registration() {
                                 <TextField id="email-field" label={values.emailLabel} onChange={handleChange('email')} helperText={values.emailError}/>
                             </Grid>
                             <Grid item className={classes.marginIcon}>
-                                <AccountCircle />
+                                <ContactMailIcon />
                             </Grid>
                         </Grid>
                     </div>
