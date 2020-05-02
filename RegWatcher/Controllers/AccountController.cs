@@ -112,8 +112,9 @@ namespace RegWatcher.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 throw new Exception("Запрашиваемый пользователь не был найден");
+            if (!string.IsNullOrEmpty(user.ConfirmedByUserId))
+                throw new Exception("Запрашиваемый пользователь уже подверждён");
             var currentUser = await _userManager.GetUserAsync(User);
-
             _context.Database.BeginTransaction();
             user.ConfirmedByUserId = currentUser.Id;
             var res = await _userManager.AddToRoleAsync(user, "User");

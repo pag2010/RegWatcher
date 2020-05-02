@@ -70,7 +70,7 @@ namespace RegWatcher
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Authenticate");
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
 
             services.AddSwaggerGen(c =>

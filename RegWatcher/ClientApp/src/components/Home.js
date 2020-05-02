@@ -1,215 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+﻿import React from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import { Link } from 'react-router-dom';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
-import HomeIcon from '@material-ui/icons/Home';
-import { Container } from 'reactstrap';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import Grid from '@material-ui/core/Grid';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import WorkIcon from '@material-ui/icons/Work';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import Alert from '@material-ui/lab/Alert';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
 import {
     Redirect
-} from 'react-router-dom'
+} from 'react-router-dom';
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-    },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: '15%',
-    },
-    drawerContainer: {
-        overflow: 'auto',
-    },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
-    container: {
-        padding: 0
-    }
-}));
-
-const options = [
-    'Show some love to Material-UI',
-    <ListItem button component={Link} to="/Account/Registration">
-        <ListItemIcon> <PersonAddIcon /> </ListItemIcon>
-        <ListItemText primary='Регистрация пользователя' />
-    </ListItem>,
-    'Show all notification content',
-    'Hide sensitive notification content',
-    'Hide all notification content',
-];
-
-
-export default function Home(props) {
+export default function Home() {
+    const useStyles = makeStyles(theme => ({
+        root: {
+            ...theme.typography.button,
+            padding: theme.spacing(1),
+        },
+        alignItemsAndJustifyContent: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+        },
+        fillWindowContent: {
+            position: 'absolute',
+            height: '85%',
+            width: '95%',
+        },
+        marginIcon: {
+            marginLeft: '5%',
+        },
+        marginButton: {
+            marginTop: '5%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        divCenter: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        inputCenter: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        errorCenter: {
+            //display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '5%'
+        }
+    }));
     const classes = useStyles();
-    const [loginPage, changeState] = useState(true);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
-    const [requestStatus, setRequestStatus] = useState(0);
-    const [roles, setRoles] = useState([]);
-    const [location, setLocation] = useState('');
-
-    
-
-    const connectOpen = async () => {
-        var res = 0;
-        try {
-            var kek = await axios.get('/api/Account/GetMyRoles')
-        }
-        catch (ex) {
-            console.log('err')
-        }
-        //res = kek.status;
-        setRequestStatus(200)
-    }
-
-
-    useEffect(() => {
-        var r = window.location.pathname
-        setLocation(r);
-        //connectOpen()
-        if (requestStatus == 0 )
-            axios.get('/api/Account/GetMyRoles')
-                .then(function (res) {
-                    setRequestStatus(200)
-                    var rroles = res.data
-                    setRoles(rroles);
-                    //console.log(roles)
-                })
-                .catch(function (err) {
-                    if (err.response.status == 401)
-                        setRequestStatus(err.response.status)
-                    if (err.response.status == 400)
-                        setRequestStatus(err.response.status)
-                })
-                .then(function (data) {
-                    console.log(data)
-                });
-        switch (requestStatus) {
-            case 401:
-                console.log("Ошибка авторизации")
-                break;
-            case 400:
-                console.log("Неизвестная ошибка")
-                break;
-            case 200:
-                console.log("Ошибок нет")
-                break;
-        }
-    }, []);
-
-    const handleClickManagement = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleMenuItemClick = (event, index) => {
-        setSelectedIndex(index);
-        setAnchorEl(null);
-    };
-
     return (
-        <div className={classes.root}>
-            {(requestStatus == 401 && location != "/Account/Login") &&
-                <Redirect to={"/Account/Login"} />
-            }
+        <div className={classes.fillWindowContent}>
+            <div className={classes.alignItemsAndJustifyContent}>
                 <div>
-                <CssBaseline />
-                {location != "/Account/Login" && (requestStatus == 200 || requestStatus == 0) &&
-                    <Drawer
-                        className={classes.drawer}
-                        variant="permanent"
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                    >
-                    <Toolbar />
-                        <div className={classes.drawerContainer}>
-                        <List>
-                            {roles.includes('Administrator') &&
-                                <div>
-                                <ListItem
-                                    button
-                                    aria-haspopup="true"
-                                    aria-controls="lock-menu"
-                                    onClick={handleClickManagement}>
-                                    <ListItemIcon> <WorkIcon /> </ListItemIcon>
-                                    <ListItemText primary='Управление' />
-                                </ListItem>
-                                <Menu
-                                    id="lock-menu"
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleClose}
-                                >
-                                    {options.map((option, index) => (
-                                        <MenuItem
-                                            key={option}
-                                            disabled={index === 0}
-                                            selected={index === selectedIndex}
-                                            onClick={(event) => handleMenuItemClick(event, index)}
-                                        >
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Menu>
-                                </div>
-                            }
-                            </List>
-                            <Divider />
-                        <List>
-                            <ListItem button component={Link} to="/Home">
-                                <ListItemIcon> <HomeIcon /> </ListItemIcon>
-                                <ListItemText primary='Домой' />
-                            </ListItem>
-                            <ListItem button component={Link} to="/Account/Login">
-                                <ListItemIcon> <MeetingRoomIcon /> </ListItemIcon>
-                                    <ListItemText primary='Выход' />
-                            </ListItem>
-                            </List>
-                        </div>
-                </Drawer>
-                }
-                    <main className={classes.content}>
-                    <Toolbar />
-                    {
-                        <Container className={classes.container}>
-                            {props.children}
-                        </Container>
-                    }
-                    </main>
+                    <div className={classes.inputCenter}>
+                        <div className={classes.root}>{"Добро пожаловать в систему!"}</div>
+                    </div>
                 </div>
-            
-        </div>
-    );
-}
+            </div>
+        </div>)
+        }
