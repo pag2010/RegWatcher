@@ -33,7 +33,8 @@ export default function Home() {
         fillWindowContent: {
             position: 'absolute',
             height: '85%',
-            width: '95%',
+            width: '80%',
+            marginLeft: '15%'
         },
         marginIcon: {
             marginLeft: '5%',

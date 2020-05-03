@@ -63,7 +63,7 @@ const options = [
     </ListItem>,
     <ListItem button component={Link} to="/Account/ConfirmUser">
         <ListItemIcon> <HowToRegIcon /> </ListItemIcon>
-        <ListItemText primary='Подтверждение пользователя' />
+        <ListItemText primary='Управление пользователями' />
     </ListItem>,
     'Hide sensitive notification content',
     'Hide all notification content',

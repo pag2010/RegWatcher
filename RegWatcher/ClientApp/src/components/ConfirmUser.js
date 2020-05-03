@@ -11,9 +11,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
+import User from './User.js';
 import {
     Redirect
 } from 'react-router-dom';
@@ -29,7 +31,11 @@ export default function Home() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '100%',
+        },
+        alignItemsAndJustifyContent2: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         fillWindowContent: {
             position: 'absolute',
@@ -60,7 +66,14 @@ export default function Home() {
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: '5%'
-        }
+        },
+        userCenter: {
+            marginLeft: '15%',
+            display: 'flex',
+            alignItems: 'stretch',
+            flexDirection: 'row',
+            justifyContent: 'flex-start'
+        },
     }));
     const classes = useStyles();
     const [values, setValues] = React.useState({
@@ -68,6 +81,10 @@ export default function Home() {
         idLabel: 'ID пользователя',
         idError: '',
     });
+
+    useEffect(() => {
+
+    }, []);
 
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
@@ -172,26 +189,21 @@ export default function Home() {
         );
     }
 
-    function GetUsers(props) {
-        const [result, setCount] = useState({ success: false, errors: [] });
+    function Users(props) {
+        const [usersRequest, setUsers] = useState({ success: false, users: [], errors: [] });
+        const [curState, setState] = useState({ page: 1, countPerPage: 5 });
+        const [filterVal, setFilter] = useState(null);
 
-        const handleConfirm = () => {
-            let params = {
-                email: values.email,
-                password: values.password,
-                confirmPassword: values.confirmPassword,
-                firstName: values.firstName,
-                secondName: values.secondName,
-                lastName: values.lastName,
-                rememberMe: false
-            };
-            axios.post('/api/Account/Registration', params)
+        
+
+        const handleGet = () => {
+            axios.get(`/api/Account/GetUsers?page=${curState.page}&countPerPage=${curState.countPerPage}`)
                 .then(function (res) {
                     console.log(res.data)
                     var message = ''
                     if (res.data.message)
                         message = res.data.message
-                    setCount({ success: res.data.success, errors: [message] })
+                    setUsers({ success: true, users: res.data, errors: [] })
                 })
                 .catch(function (err) {
                     console.log(err.response.data)
@@ -203,29 +215,33 @@ export default function Home() {
                     } else {
                         messages.push(err.response.data.message)
                     }
-                    setCount({ success: false, errors: messages })
+                    setUsers({ success: false, errors: messages })
                 });
         }
+
+        useEffect(() => {
+            handleGet()
+        }, []);
+
+        
+
         return (
             <div>
-                <div className={classes.divCenter}>
-                    <Button variant="contained" color="primary" onClick={handleConfirm} className={classes.marginButton} disabled={!values.emailError == ''}>
-                        Подтвердить
-                </Button>
+                <div className={classes.inputCenter}>
+                <ButtonGroup color="primary" aria-label="outlined primary button group">
+                        {curState.page > 1 &&
+                            <Button>{curState.page - 1}</Button>
+                        }
+                        <Button onClick={handleGet}>{curState.page}</Button>
+                        <Button>{curState.page + 1}</Button>
+                </ButtonGroup>
                 </div>
-                {result.success
-                    ? <div>
-                        <div className={classes.errorCenter}>
-                            <SuccessAlert message={"Новый пользователь создан."} />
-                        </div>
-                        <div className={classes.errorCenter}>
-                            <InfoAlert message={'Пользователю назначена роль "Пользователь".'} />
-                        </div>
-                    </div>
-                    :
-                    <div className={classes.errorCenter}>
-                        <ErrorAlert errors={result.errors} />
-                    </div>
+                {usersRequest.success &&
+                    <div>
+                    {usersRequest.users.map((user) => <User Id={user.userId} Name={user.name} Email={user.email}
+                        isEmailConfirmed={user.isEmailConfirmed} confirmedByUserId={user.confirmedByUserId} roles={user.roles}></User>)}
+                    
+                </div>
                 }
             </div>
         );
@@ -233,22 +249,30 @@ export default function Home() {
 
     return (
         <div className={classes.fillWindowContent}>
+           
             <div className={classes.alignItemsAndJustifyContent}>
                 <div>
-                    <div className={classes.root}>{"Подтверждение пользователя"}</div>
-                    <div className={classes.inputCenter}>
-                        <Grid container spacing={1} className={classes.inputCenter}>
-                            <Grid item>
-                                <TextField id="id-field" label={values.idLabel} onChange={handleChange('id')} helperText={values.idError} />
-                            </Grid>
-                            <Grid item className={classes.marginIcon}>
-                                <FingerprintIcon />
-                            </Grid>
-                        </Grid>
-                    </div>
-                    <ConfirmBtn />
+                    <Users />
                 </div>
-            </div>
+
+                {false &&
+                    <div>
+                        <div className={classes.root}>{"Подтверждение пользователя"}</div>
+                        <div className={classes.inputCenter}>
+                            <Grid container spacing={1} className={classes.inputCenter}>
+                                <Grid item>
+                                    <TextField id="id-field" label={values.idLabel} onChange={handleChange('id')} helperText={values.idError} />
+                                </Grid>
+                                <Grid item className={classes.marginIcon}>
+                                    <FingerprintIcon />
+                                </Grid>
+                            </Grid>
+                        </div>
+                        <ConfirmBtn />
+                    </div>
+                }
+                </div>
+            
         </div>
     );
 }
